@@ -1,3 +1,6 @@
-# Ville_idealeA line I wrote on my local computer
-adding a line
-This is a line from Rstudio
+# Projet Ville idéale
+fonctions contains auxiliary functions 
+data contains supplementary  data
+cache contains intermediate data 
+process contains code to process data
+analysis contains code
