@@ -1,0 +1,6 @@
+- Automatiser pour une ville
+- Récupérer nom_ville_codpostal
+- Passer le code sur Github
+- Commencer analyse sur une seule ville un petit count. Nuage de mots
+- Passer le projet sous Mac. Peut-être mettre packrat juste avant pour voir comment le package fonctionne
+- Passer le projet sur Git. 
