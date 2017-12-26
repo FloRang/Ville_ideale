@@ -14,8 +14,13 @@ get_comment <- function(id_ville, num_page) {
              page={num_page}#commentaires")
    }
   
-  read_html(path) %>% 
+  texte <- read_html(path) %>% 
     html_nodes(".comm") %>% 
     html_text()
   
-}
+  # Pour économiser les serveurs de ville idéale, on pause pendant 
+  # 5 secondes l'exécution du code. 
+  Sys.sleep(5)
+  
+  texte
+  }
