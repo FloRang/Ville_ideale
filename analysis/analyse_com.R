@@ -1,9 +1,9 @@
-R.utils::sourceDirectory("Fonctions")
+R.utils::sourceDirectory("fonctions")
 library(here)
 library(tidytext)
 library(tidyverse)
 
-commentaire_df <- read_csv(glue("cache/SURESNES_92073.csv"))
+commentaire_df <- read_csv("cache/SURESNES_92073.csv")
 
 commentaires <- commentaire_df  %>%
   rowid_to_column(var = "num_com") %>%
