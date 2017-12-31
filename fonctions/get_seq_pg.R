@@ -1,5 +1,5 @@
 #get_com_ville
-init_df_pages <- function(id_ville) {
+get_seq_pg <- function(id_ville) {
   library(rvest)
   print("Pour économiser les serveurs, le programme est ralenti manuellement")
   Sys.sleep(5) # 
