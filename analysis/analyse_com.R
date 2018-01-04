@@ -3,10 +3,13 @@ library(here)
 library(tidytext)
 library(tidyverse)
 
-commentaire_df <- read_csv("cache/SURESNES_92073.csv")
+commentaire_df <- read_csv("cache/extrait_to_250.csv")
+count(commentaire_df, nom_ville)
 
-commentaires <- commentaire_df  %>%
-  rowid_to_column(var = "num_com") %>%
+com_selct_brut <- commentaire_df  %>%
+  filter(nom_ville == "CLAMART")
+
+commentaires <-  com_selct_brut %>% 
   mutate(com = str_replace_all(com , pattern = "([:upper:])", replacement = " \\1")) %>% 
   unnest_tokens(output = mot, input = com)  
 
@@ -43,6 +46,6 @@ prnt_com_ass <-  function(commentaires_brut, mot_clef){
     map(~ str_view(.x, mot_clef))
 }
 
-prnt_com_ass(commentaire_df, "paris")
+prnt_com_ass(com_selct_brut, "manque")
 
 
