@@ -2,34 +2,25 @@ R.utils::sourceDirectory("fonctions")
 library(here)
 library(tidytext)
 library(tidyverse)
+library(SnowballC)
+library(tm)
+
+
 
 commentaire_df <- read_csv("cache/extrait_to_250.csv")
-count(commentaire_df, nom_ville)
 
-com_selct_brut <- commentaire_df  %>%
-  filter(nom_ville == "CLAMART")
-
-commentaires <-  com_selct_brut %>% 
-  mutate(com = str_replace_all(com , pattern = "([:upper:])", replacement = " \\1")) %>% 
-  unnest_tokens(output = mot, input = com)  
-
+no_info <- read_csv(here("data", "mot_sans_info.csv"))
 
 stop_words_fr <- read_delim(file = here("data", "stopwords_fr.txt"), 
                             delim = "\\n", col_names = FALSE)
 
-commentaires  <- anti_join(commentaires, stop_words_fr, 
-                           by = c("mot" = "X1"))
+com_token <- get_com_token(commentaire_df = commentaire_df,
+                           stop_words_fr = stop_words_fr, 
+                           no_info = no_info)
 
-no_info <- read_csv(here("data", "mot_sans_info.csv"))
-
-#On enleve les accents
-occurences <- commentaires %>%  
-  mutate(mot = stringi::stri_trans_general(mot,"latin-ascii")) %>%
-  mutate(mot = str_replace_all(mot, pattern = "(l|d|j|qu|n|s|c)'", replacement = "")) %>%
-  filter(str_detect(mot, pattern = "[:alpha:]"))  %>% 
-  anti_join(no_info) %>% 
-  anti_join(stop_words_fr, by = c("mot" = "X1")) %>% 
-  count(mot, sort = TRUE)
+occurences <-  com_token %>%
+  mutate(racine = wordStem(mot, language = "french")) %>% 
+  count(racine, sort = TRUE)
 
 
 occurences %>%
