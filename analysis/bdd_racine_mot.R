@@ -29,3 +29,4 @@ bdd_racine_mot <- com_token %>%
 
 write_csv(bdd_racine_mot, "data/bdd_racine_mot.csv")
 
+

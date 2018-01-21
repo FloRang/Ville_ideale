@@ -5,8 +5,6 @@ library(tidyverse)
 library(SnowballC)
 library(tm)
 
-
-
 commentaire_df <- read_csv("cache/extrait_to_250.csv")
 
 no_info <- read_csv(here("data", "mot_sans_info.csv"))
@@ -18,13 +16,16 @@ com_token <- get_com_token(commentaire_df = commentaire_df,
                            stop_words_fr = stop_words_fr, 
                            no_info = no_info)
 
-occurences <-  com_token %>%
-  mutate(racine = wordStem(mot, language = "french")) %>% 
-  count(racine, sort = TRUE)
+
+racine_mot <- read_csv("data/bdd_racine_mot.csv") %>% rename(mot_new = mot)
+
+
+occurences <-  com_token %>%   
+  count(mot, sort = TRUE) 
 
 
 occurences %>%
-  slice(1:30) %>% 
+  top_n(30, n) %>% 
   ggplot(aes(x = n, y = fct_reorder(mot, n))) +
   geom_point(fill = "black") + 
   theme_light()
