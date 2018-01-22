@@ -1,22 +1,11 @@
 R.utils::sourceDirectory("fonctions")
-library(here)
-library(tidytext)
 library(tidyverse)
-library(SnowballC)
 
-commentaire_df <- read_csv("cache/extrait_to_250.csv")
+com_traite <- read_rds(path = "cache/com_traite.rds")
 
-no_info <- read_csv(here("data", "mot_sans_info.csv"))
 
-stop_words_fr <- read_delim(file = here("data", "stopwords_fr.txt"), 
-                            delim = "\\n", col_names = FALSE)
+# Analyse mots simples ----------------------------------------------------
 
-com_token <- commentaire_df %>% 
-  get_com_token() %>% 
-  traiter_com(stop_words_fr = stop_words_fr, 
-              no_info = no_info)
-
-racine_mot <- read_csv("data/bdd_racine_mot.csv") %>% rename(mot_new = mot)
 
 com_token %>%   
   filter(nom_ville ==  "ISSY LES MOULINEAUX") %>% 
@@ -27,14 +16,48 @@ com_token %>%
   theme_light()
 
 
+
+# Analyse mots composés ---------------------------------------------------
+
+
+com_traite %>%   
+  count(deux_mots, sort = TRUE)  %>%
+  top_n(30, n) %>% 
+  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
+  geom_point(fill = "black") + 
+  theme_light()
+
+# TODO Essayer de attribuer un numéro de commentaire pour qu'il soit ensuite 
+# facilement retrouvable. 
+com_traite %>%   
+  filter(nom_ville == "ISSY LES MOULINEAUX") %>% 
+  count(deux_mots, sort = TRUE)  %>%
+  top_n(10, n) %>% 
+  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
+  geom_point(fill = "black") + 
+  theme_light()
+
+
+com_traite %>%   
+  filter(nom_ville == "LEVALLOIS PERRET" & mot == "manque") %>% 
+  count(deux_mots, sort = TRUE)  %>%
+  top_n(10, n) %>% 
+  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
+  geom_point(fill = "black") + 
+  theme_light()
+
+
+
+# Commentaire associé -----------------------------------------------------
+
+
 prnt_com_ass <-  function(commentaires_brut, mot_clef){
   commentaires_brut %>% 
-  filter(str_detect(com, mot_clef)) %>%
+    filter(str_detect(com, mot_clef)) %>%
     pull(com) %>% 
     map(~ str_view(.x, mot_clef))
 }
 commentaire_df %>%  
   filter(nom_ville == "ISSY LES MOULINEAUX") %>% 
   prnt_com_ass("quartier")
-
 

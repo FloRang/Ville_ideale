@@ -6,13 +6,12 @@
 R.utils::sourceDirectory("fonctions")
 library(tidyverse)
 library(tidytext)
-library(here)
 
 commentaire_df <- read_csv("cache/extrait_to_250.csv")
 
-no_info <- read_csv(here("data", "mot_sans_info.csv"))
+no_info <- read_csv("data/mot_sans_info.csv")
 
-stop_words_fr <- read_delim(file = here("data", "stopwords_fr.txt"), 
+stop_words_fr <- read_delim(file = "data/stopwords_fr.txt", 
                             delim = "\\n", col_names = FALSE)
 
 com_token <- get_com_token(commentaire_df = commentaire_df,
