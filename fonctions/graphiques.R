@@ -7,7 +7,6 @@ plot_mots <- function(df, var, nom_ville, nb_select = 20) {
   var_name <- quo_name(quo_var)
   
   df %>% 
-    filter(nom_ville == ville) %>% 
     count(!!quo_var) %>% 
     top_n(nb_select, n) %>% 
     mutate(!!var_name := fct_reorder(!!quo_var, n)) %>% 

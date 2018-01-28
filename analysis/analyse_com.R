@@ -14,14 +14,21 @@ com_traite <- read_rds(path = "cache/com_traite.rds")
 
 ville <- "ISSY LES MOULINEAUX"
 
+com_traite_long <- com_traite %>%  
+  filter(nom_ville == ville) %>% 
+  gather(key = nb_mot, value = expression, mot, deux_mots) %>% 
+  mutate(nb_mot = fct_recode(nb_mot, "un_mot" = "mot"))
+
 # Analyse mots simples ----------------------------------------------------
-com_traite %>%   
-  plot_mots(var = mot, nom_ville = ville, nb_select = 20)
+com_traite_long %>% 
+  filter(nb_mot == "un_mot") %>% 
+  plot_mots(var = expression, nom_ville = ville, nb_select = 20)
 
 
 # Analyse mots composés ---------------------------------------------------
-com_traite %>%   
-  plot_mots(var = deux_mots, nom_ville = ville, nb_select = 5)
+com_traite_long %>%   
+  filter(nb_mot == "deux_mots") %>% 
+  plot_mots(var = expression, nom_ville = ville, nb_select = 5)
 
 
 # Analyse expression manque -----------------------------------------------
