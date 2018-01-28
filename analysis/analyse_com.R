@@ -1,63 +1,43 @@
 R.utils::sourceDirectory("fonctions")
 library(tidyverse)
+library(tidytext)
 
+com_brut <- read_csv("cache/extrait_to_250.csv")
 com_traite <- read_rds(path = "cache/com_traite.rds")
-
-
-# Analyse mots simples ----------------------------------------------------
-
-
-com_token %>%   
-  filter(nom_ville ==  "ISSY LES MOULINEAUX") %>% 
-  count(mot, sort = TRUE) %>%
-  top_n(30, n) %>% 
-  ggplot(aes(x = n, y = fct_reorder(mot, n))) +
-  geom_point(fill = "black") + 
-  theme_light()
-
-
-
-# Analyse mots composés ---------------------------------------------------
-
-
-com_traite %>%   
-  count(deux_mots, sort = TRUE)  %>%
-  top_n(30, n) %>% 
-  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
-  geom_point(fill = "black") + 
-  theme_light()
 
 # TODO Essayer de attribuer un numéro de commentaire pour qu'il soit ensuite 
 # facilement retrouvable. 
+#TODO Mettre les nouveaux graphiques dans l'appli Shiny. 
+#TODO Tout passer en proportion
+#Améliorer l'interface du Shiny. 
+#Continuer le scraping du site. 
+
+ville <- "ISSY LES MOULINEAUX"
+
+# Analyse mots simples ----------------------------------------------------
 com_traite %>%   
-  filter(nom_ville == "ISSY LES MOULINEAUX") %>% 
-  count(deux_mots, sort = TRUE)  %>%
-  top_n(10, n) %>% 
-  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
-  geom_point(fill = "black") + 
-  theme_light()
+  plot_mots(var = mot, nom_ville = ville, nb_select = 20)
 
 
+# Analyse mots composés ---------------------------------------------------
 com_traite %>%   
-  filter(nom_ville == "LEVALLOIS PERRET" & mot == "manque") %>% 
-  count(deux_mots, sort = TRUE)  %>%
-  top_n(10, n) %>% 
-  ggplot(aes(x = n, y = fct_reorder(deux_mots, n))) +
-  geom_point(fill = "black") + 
-  theme_light()
+  plot_mots(var = deux_mots, nom_ville = ville, nb_select = 5)
 
+
+# Analyse expression manque -----------------------------------------------
+com_traite %>%   
+  filter(mot == "manque") %>% 
+  plot_mots(deux_mots, ville, nb_select = 5)
 
 
 # Commentaire associé -----------------------------------------------------
-
-
 prnt_com_ass <-  function(commentaires_brut, mot_clef){
   commentaires_brut %>% 
     filter(str_detect(com, mot_clef)) %>%
     pull(com) %>% 
     map(~ str_view(.x, mot_clef))
 }
-commentaire_df %>%  
-  filter(nom_ville == "ISSY LES MOULINEAUX") %>% 
+com_brut %>%  
+  filter(nom_ville == ville) %>% 
   prnt_com_ass("quartier")
 
