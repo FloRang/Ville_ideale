@@ -1,4 +1,4 @@
-#process villes
+#Scraping des villes
 R.utils::sourceDirectory("fonctions")
 library(tidyverse)
 

@@ -1,15 +1,15 @@
 # pipeline pour traiter les commentaires 
 R.utils::sourceDirectory("fonctions")
-library(here)
 library(tidytext)
 library(tidyverse)
 library(SnowballC)
 
-commentaire_df <- read_csv("cache/extrait_to_250.csv")
+commentaire_df <- read_csv("cache/extrait_to_250.csv") %>% 
+  rowid_to_column(var = "num_com")
 
-no_info <- read_csv(here("data", "mot_sans_info.csv"))
+no_info <- read_csv("data/mot_sans_info.csv")
 
-stop_words_fr <- read_delim(file = here("data", "stopwords_fr.txt"), 
+stop_words_fr <- read_delim(file = "data/stopwords_fr.txt", 
                             delim = "\\n", col_names = FALSE)
 racine_mot <- read_csv("data/bdd_racine_mot.csv") %>% rename(mot_new = mot)
 
