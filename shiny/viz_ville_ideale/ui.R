@@ -1,9 +1,6 @@
 # This is the user-interface definition of a Shiny web application. You can
 # run the application by clicking 'Run App' above.
-library(shiny)
 
-
-ville_dispo <- sort(unique(com_traite$nom_ville))
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
