@@ -14,11 +14,7 @@ shinyUI(fluidPage(
     sidebarPanel(
        selectInput("choix_ville",
                    "Ville choisie:",
-                   ville_dispo),
-       checkboxGroupInput("nombre_mots",
-                     "Longueur expression", 
-                     c("Un mot" = "un_mot", "Deux mots" = "deux_mots"), 
-                     selected =  "un_mot")
+                   ville_dispo)
     ),
     
     
