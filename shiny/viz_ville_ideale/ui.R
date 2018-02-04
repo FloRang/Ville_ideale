@@ -20,7 +20,8 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("plot_simple")
+      plotOutput("plot_simple"),
+      plotOutput("plot_tf_idf")
     )
   )
 ))

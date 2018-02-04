@@ -20,9 +20,12 @@ name_ville_decoup <- str_split(ville, pattern = " |-") %>%
 
 com_traite_long <- com_traite %>%  
   filter(nom_ville == ville) %>% 
-  filter(!mot %in% name_ville_decoup) %>% 
-  gather(key = nb_mot, value = expression, mot, deux_mots) %>% 
-  mutate(nb_mot = fct_recode(nb_mot, "un_mot" = "mot"))
+  filter(!mot %in% name_ville_decoup) 
+
+
+stat <- com_traite_long %>% 
+  count(nom_ville, expression) 
+  
 
 # Analyse mots simples ----------------------------------------------------
 com_traite_long %>% 

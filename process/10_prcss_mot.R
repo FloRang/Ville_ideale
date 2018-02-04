@@ -28,7 +28,9 @@ com_traite <- df_token %>%
   filter(!mot1 %in% mots_interdits) %>% 
   mutate(mot2 = if_else(mot2 %in% mots_interdits,
                         true = mot3,
-                        false = mot2)) 
+                        false = mot2)) %>%  
+  filter(!mot2 %in% mots_interdits) 
+
 #Appliquer racinisation
 com_traite <- com_traite %>% 
   mutate(rac1 = wordStem(mot1, language = "french")) %>% 
