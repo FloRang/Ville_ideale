@@ -6,8 +6,12 @@ shinyServer(function(input, output) {
   
   
   df_filtre <- reactive({
+    
     com_traite_long %>%
-      filter(nom_ville == input$choix_ville)
+      filter(nom_ville == input$choix_ville) %>% 
+      enlv_nom_ville(input$choix_ville) %>% 
+      enlv_incl()
+    
   })
   
   

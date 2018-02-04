@@ -16,8 +16,8 @@ plot_mots <- function(df, var_to_plot, nb_select = 20) {
   
   
   top_words %>%
-   mutate(expression = fct_reorder(expression, !!quo_var)) %>% 
-   ggplot(aes_string(x = "expression", y = quo_var_str)) +
+    mutate(expression = fct_reorder(expression, !!quo_var)) %>% 
+    ggplot(aes_string(x = "expression", y = quo_var_str)) +
     geom_col(fill = "black", alpha = 0.1) + 
     geom_text(aes(label = expression, x = expression), hjust =  0, y = 0) + 
     coord_flip() +

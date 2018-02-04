@@ -13,19 +13,24 @@ com_traite <- read_rds(path = "cache/com_traite.rds")
 #Continuer le scraping du site. 
 
 ville <- "ISSY LES MOULINEAUX"
-name_ville_decoup <- str_split(ville, pattern = " |-") %>% 
-  flatten_chr() %>% 
-  str_to_lower()
 
 
-com_traite_long <- com_traite %>%  
+
+
+
+com_traite_long <- com_traite %>% 
+  gather(key = nb_mot, value = expression, mot, deux_mots) %>% 
+  mutate(nb_mot = fct_recode(nb_mot, "un_mot" = "mot")) %>% 
+  count(nom_ville, expression) %>% 
+  filter(n > 2) %>% #On enlève les mots rares
+  bind_tf_idf(term = expression, document = nom_ville, n = n) 
+
+com_traite_long <- com_traite_long %>%  
   filter(nom_ville == ville) %>% 
-  filter(!mot %in% name_ville_decoup) 
+  enlv_nom_ville(ville)
 
 
-stat <- com_traite_long %>% 
-  count(nom_ville, expression) 
-  
+
 
 # Analyse mots simples ----------------------------------------------------
 com_traite_long %>% 
